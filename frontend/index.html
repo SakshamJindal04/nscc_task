@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Club | Home</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* === CSS Variables for Easy Theming === */
+    :root {
+      --primary-color: #ff6f61; /* A vibrant coral/orange */
+      --primary-hover: #e04e40; /* Darker coral for hover */
+      --secondary-color: #00bcd4; /* A bright, refreshing teal */
+      --background-light: #e0f2f7; /* A very light, cool blue/green */
+      --text-dark: #2c3e50; /* Darker, slightly desaturated blue for text */
+      --text-light: #fff;
+      --card-background: #ffffff;
+      --border-radius: 12px; /* Slightly larger border-radius for a softer look */
+      --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.15);
+      --transition-speed: 0.4s ease-out; /* Slightly slower and smoother transition */
+      
+      /* New gradients */
+      --header-gradient: linear-gradient(90deg, #ff6f61, #ff9a8d); /* Warm gradient for header */
+      --hero-gradient: linear-gradient(135deg, #00bcd4, #008ba8); /* Cool gradient for hero */
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--card-background); /* A clean white background to make content pop */
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--header-gradient); /* Use the new gradient here */
+      color: var(--text-light);
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    nav a {
+      color: var(--text-light);
+      margin-left: 10px;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: var(--border-radius);
+      transition: background-color var(--transition-speed), transform var(--transition-speed);
+    }
+    
+    /* Style for the link of the current page */
+    nav a.active {
+      background-color: rgba(0, 0, 0, 0.2);
+      font-weight: 600;
+    }
+
+    nav a:not(.active):hover {
+      background-color: rgba(255, 255, 255, 0.25); /* Slightly more visible hover for light text */
+      text-decoration: none;
+      transform: translateY(-2px);
+    }
+
+    main {
+      width: 100%;
+    }
+
+    .hero {
+      background: var(--hero-gradient); /* Use the new cool gradient here */
+      color: #fff;
+      text-align: center;
+      padding: 100px 20px; /* More vertical padding */
+      display: flex; /* Use flex to vertically center content */
+      align-items: center;
+      justify-content: center;
+      min-height: 400px; /* Ensure a minimum height for the hero */
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h2 {
+      font-size: 52px; /* Larger title */
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.2); /* Subtle text shadow for pop */
+    }
+
+    .hero p {
+      font-size: 20px; /* Larger paragraph text */
+      line-height: 1.7;
+      margin-bottom: 40px;
+      opacity: 0.95;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto; /* Margin top is handled by event-details now */
+      padding: 40px;
+      background: var(--card-background);
+    }
+
+    button {
+      background: var(--primary-color); /* Use primary color */
+      color: var(--text-light);
+      border: none;
+      padding: 14px 28px; /* Slightly larger buttons */
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 17px;
+      transition: background-color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+      box-shadow: 0 4px 12px rgba(255, 111, 97, 0.4); /* Shadow matching primary color */
+    }
+
+    button:hover {
+      background: var(--primary-hover);
+      transform: translateY(-4px); /* More pronounced lift */
+      box-shadow: 0 6px 16px rgba(255, 111, 97, 0.5); /* Enhanced shadow on hover */
+    }
+    
+    .hero button {
+      font-size: 20px;
+      padding: 18px 35px;
+      background: var(--primary-color); /* Make hero button use primary color */
+      box-shadow: 0 6px 15px rgba(255, 111, 97, 0.5);
+    }
+
+    .hero button:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 8px 20px rgba(255, 111, 97, 0.6);
+    }
+
+    .event-details {
+      display: flex;
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
+      justify-content: space-around;
+      gap: 30px;
+      background: linear-gradient(45deg, #f0f8ff, #e6f7ff); /* Light, subtle blue gradient */
+      padding: 35px;
+      border-radius: var(--border-radius);
+      margin-top: -80px; /* Pull it up into the hero for a layered effect */
+      margin-bottom: 60px;
+      text-align: center;
+      border: 1px solid #d0e8f2;
+      box-shadow: var(--shadow-md);
+      position: relative; 
+      z-index: 1; 
+    }
+
+    .detail-item {
+      flex: 1; /* Allow items to grow and shrink */
+      min-width: 250px; /* Prevent items from becoming too squished */
+    }
+
+    .detail-item h3 {
+      color: var(--secondary-color); /* Use secondary color for these headings */
+      margin-top: 0;
+      font-size: 22px;
+    }
+
+    .detail-item p {
+      margin-bottom: 0;
+      font-size: 17px;
+      color: var(--text-dark);
+    }
+
+    .features {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .features h2 {
+      font-size: 36px;
+      margin-bottom: 45px;
+      color: var(--text-dark);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Slightly wider cards */
+      gap: 30px;
+      text-align: left;
+    }
+
+    .feature-card {
+      background: var(--card-background);
+      padding: 35px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #e0f2f7;
+      transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px); /* More pronounced lift on hover */
+      box-shadow: var(--shadow-md);
+    }
+
+    .feature-card h3 {
+      margin-top: 0;
+      font-size: 24px;
+      color: var(--primary-color); /* Use primary color for card headings */
+    }
+
+    .feature-card p {
+      font-size: 16px;
+      color: #5a6b7d;
+    }
+
+    footer {
+      text-align: center;
+      padding: 35px;
+      margin-top: 60px;
+      background: #2c3e50; /* A dark, rich blue-grey */
+      color: #ecf0f1; /* Light grey text */
+      font-size: 15px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Event Club</h1>
+    <nav>
+      <!-- === CORRECTED LINKS === -->
+      <a href="index.html" class="active">Home</a>
+      <a href="register.html">Register</a>
+      <a href="attendance.html">Attendance</a>
+      <a href="previous.html">Previous Events</a>
+      <a href="developer.html">Developers</a>
+      <a href="admin.html">Admin</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h2>Our Annual Tech Symposium 2025 🎉</h2>
+        <p>Join innovators, creators, and learners for a day of inspiring talks, hands-on workshops, and networking.</p>
+        <button onclick="window.location.href='register.html'">Register Now &rarr;</button>
+      </div>
+    </section>
+
+    <div class="container">
+      
+      <section class="event-details">
+        <div class="detail-item">
+          <h3>📅 Date & Time</h3>
+          <p>Saturday, 18th October 2025<br>9:00 AM - 5:00 PM</p>
+        </div>
+        <div class="detail-item">
+          <h3>📍 Venue</h3>
+          <p>University Main Auditorium<br>Kattankulathur, Tamil Nadu</p>
+        </div>
+      </section>
+
+      <section class="features">
+        <h2>Why You Should Attend</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <h3>🎤 Inspiring Speakers</h3>
+            <p>Learn from industry leaders who are shaping the future of technology.</p>
+          </div>
+          <div class="feature-card">
+            <h3>🤝 Network with Peers</h3>
+            <p>Connect with hundreds of like-minded students and professionals.</p>
+          </div>
+          <div class="feature-card">
+            <h3>🛠️ Hands-on Workshops</h3>
+            <p>Gain practical skills in our interactive and engaging workshop sessions.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+  
+  <footer>
+    <p>&copy; 2025 Event Club. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
