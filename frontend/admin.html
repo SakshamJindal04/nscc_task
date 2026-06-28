@@ -8,45 +8,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
   
-  <!-- Socket.IO client library (served automatically by the server) -->
   <script src="/socket.io/socket.io.js"></script>
 
   <style>
-    :root {
-      --primary-color: #ff6f61; --primary-hover: #e04e40; --secondary-color: #00bcd4; --background-light: #e0f2f7; --text-dark: #2c3e50; --text-light: #fff; --card-background: #ffffff; --border-radius: 12px; --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.1); --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.15); --transition-speed: 0.4s ease-out; --header-gradient: linear-gradient(90deg, #ff6f61, #ff9a8d);
-    }
-    body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; background: #f4f7fa; color: var(--text-dark); line-height: 1.6; }
-    header { background: var(--header-gradient); color: var(--text-light); padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; }
-    header h1 { margin: 0; font-size: 24px; font-weight: 700; }
-    footer { text-align: center; padding: 35px; margin-top: 60px; background: #2c3e50; color: #ecf0f1; font-size: 15px; }
-    nav a { color: var(--text-light); margin-left: 10px; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: var(--border-radius); transition: all var(--transition-speed); }
-    nav a:hover { background-color: rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
-    nav a.active { background-color: rgba(0, 0, 0, 0.2); font-weight: 600; }
-    main { width: 100%; }
-    .container { max-width: 1100px; margin: 60px auto; padding: 50px; background: var(--card-background); border-radius: var(--border-radius); box-shadow: var(--shadow-md); }
-    button { background: var(--primary-color); color: var(--text-light); border: none; padding: 14px 28px; border-radius: var(--border-radius); cursor: pointer; font-weight: 600; font-size: 17px; transition: all var(--transition-speed); box-shadow: 0 4px 12px rgba(255, 111, 97, 0.4); width: 100%; }
-    button:hover { background: var(--primary-hover); transform: translateY(-4px); box-shadow: 0 6px 16px rgba(255, 111, 97, 0.5); }
-    .page-title { font-size: 36px; font-weight: 700; text-align: center; color: var(--text-dark); margin-top: 0; margin-bottom: 40px; }
-    .form-group { margin-bottom: 25px; }
-    label { display: block; margin-bottom: 8px; font-weight: 600; color: #5a6b7d; }
-    input[type="password"] { width: 100%; padding: 14px; border: 1px solid #d0e8f2; border-radius: var(--border-radius); font-size: 16px; font-family: 'Inter', sans-serif; box-sizing: border-box; transition: all var(--transition-speed); }
-    input[type="password"]:focus { outline: none; border-color: var(--secondary-color); box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2); }
-    
-    /* --- Admin-specific styles --- */
     #login-section { max-width: 400px; margin: 0 auto; }
-    #attendance-section { display: none; /* Hidden by default */ }
-    #login-feedback { text-align: center; margin-top: 15px; font-weight: 500; color: #e74c3c; }
-
-    /* Table styles */
-    #attendance-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    #attendance-table th, #attendance-table td { padding: 12px 15px; border: 1px solid #e0f2f7; text-align: left; }
-    #attendance-table thead { background-color: #f4f7fa; }
-    #attendance-table th { font-weight: 600; }
-    .status-present { color: #27ae60; font-weight: 600; }
-    .status-absent { color: #c0392b; }
+    #attendance-section { display: none; }
+    .table-container { overflow-x: auto; }
+    
     .row-updated { animation: highlight 1.5s ease-out; }
-    @keyframes highlight { from { background-color: var(--background-light); } to { background-color: transparent; } }
+    @keyframes highlight { 
+      from { background-color: rgba(59, 130, 246, 0.2); } 
+      to { background-color: transparent; } 
+    }
   </style>
 </head>
 <body>
@@ -57,47 +32,62 @@
       <a href="index.html">Home</a>
       <a href="register.html">Register</a>
       <a href="attendance.html">Attendance</a>
-      <a href="previous.html">Previous Events</a>
-      <a href="developer.html">Developers</a>
+      <a href="previousevents.html">Previous Events</a>
+      <a href="about.html">About</a>
       <a href="admin.html" class="active">Admin</a>
+      <button id="theme-toggle" aria-label="Toggle Dark Mode">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
     </nav>
   </header>
 
   <main>
-    <div class="container">
+    <div class="container reveal">
+      
       <!-- Login Section -->
-      <div id="login-section">
-        <h2 class="page-title">Admin Login 🔐</h2>
+      <div id="login-section" class="card form-container">
+        <h2 class="page-title" style="margin-top:0">Admin Login 🔐</h2>
         <form id="login-form">
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" placeholder="password: admin123" required>
+            <input type="password" id="password" placeholder="Hint: admin123" required>
           </div>
-          <button type="submit">Login</button>
-          <div id="login-feedback"></div>
+          <button type="submit" style="width:100%">Login</button>
+          <div id="login-feedback" class="feedback"></div>
         </form>
       </div>
 
-      <!-- Attendance Data Section (hidden by default) -->
-      <div id="attendance-section">
-        <h2 class="page-title">Real-Time Attendance 📊</h2>
-        <a href="/api/export" download>
-            <button style="width: auto; margin-bottom: 20px; background-color: var(--secondary-color);">Export to Excel</button>
-        </a>
-        <table id="attendance-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Registration ID</th>
-              <th>Status</th>
-              <th>Timestamp</th>
-            </tr>
-          </thead>
-          <tbody id="attendance-body">
-            <!-- Data will be populated here -->
-          </tbody>
-        </table>
+      <!-- Attendance Data Section -->
+      <div id="attendance-section" class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+          <h2 class="page-title" style="margin:0">Real-Time Attendance 📊</h2>
+          <button onclick="window.location.href='/api/export'" style="background: var(--secondary-color);">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:20px;height:20px;">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Export to Excel
+          </button>
+        </div>
+        
+        <div class="table-container">
+          <table id="attendance-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Registration ID</th>
+                <th>Status</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="attendance-body">
+              <!-- Data will be populated here -->
+              <tr><td colspan="5" style="text-align: center;">Loading data...</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </main>
@@ -106,6 +96,7 @@
     <p>&copy; 2025 Event Club. All rights reserved.</p>
   </footer>
 
+  <script src="js/theme.js"></script>
   <script>
     const loginSection = document.getElementById('login-section');
     const attendanceSection = document.getElementById('attendance-section');
@@ -116,6 +107,7 @@
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       loginFeedback.textContent = '';
+      loginFeedback.className = 'feedback';
       const password = document.getElementById('password').value;
 
       try {
@@ -126,16 +118,17 @@
         });
 
         if (response.ok) {
-          // On successful login
           loginSection.style.display = 'none';
           attendanceSection.style.display = 'block';
           fetchAttendanceData();
           setupSocketListeners();
         } else {
           loginFeedback.textContent = 'Incorrect password. Please try again.';
+          loginFeedback.classList.add('error');
         }
       } catch (err) {
         loginFeedback.textContent = 'Could not connect to the server.';
+        loginFeedback.classList.add('error');
       }
     });
 
@@ -143,7 +136,6 @@
       try {
         const response = await fetch('/api/admin/attendance');
         if (!response.ok) {
-          // If session expires or user is not authorized, show login
           loginSection.style.display = 'block';
           attendanceSection.style.display = 'none';
           return;
@@ -156,14 +148,19 @@
     }
 
     function populateTable(participants) {
-      attendanceBody.innerHTML = ''; // Clear existing data
+      if (participants.length === 0) {
+        attendanceBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No participants registered yet.</td></tr>';
+        return;
+      }
+      
+      attendanceBody.innerHTML = ''; 
       participants.forEach(p => {
         const row = document.createElement('tr');
-        row.dataset.id = p.id; // Store unique ID for real-time updates
+        row.dataset.id = p.id; 
 
         const statusClass = p.attended ? 'status-present' : 'status-absent';
         const statusText = p.attended ? 'Present' : 'Absent';
-        const timestamp = p.timestamp ? new Date(p.timestamp).toLocaleTimeString() : 'N/A';
+        const timestamp = p.timestamp ? new Date(p.timestamp).toLocaleTimeString() : '—';
 
         row.innerHTML = `
           <td>${p.name}</td>
@@ -182,7 +179,6 @@
       socket.on('attendanceUpdate', (updatedParticipant) => {
         const row = attendanceBody.querySelector(`tr[data-id='${updatedParticipant.id}']`);
         if (row) {
-          // Update the existing row
           const statusCell = row.children[3];
           const timestampCell = row.children[4];
 
@@ -196,7 +192,5 @@
       });
     }
   </script>
-
 </body>
 </html>
-
